@@ -8,7 +8,7 @@ const HEADERS = {
     'accept': '*/*',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
     'content-type': 'application/json',
-    'cookie': 'zguid=24|%2492644882-0173-41c5-9423-7d998663ba5c; zjs_anonymous_id=%2292644882-0173-41c5-9423-7d998663ba5c%22; zjs_user_id=null; zg_anonymous_id=%2250da1ac9-caab-4b5a-b18e-ec5aa8115a50%22; zgsession=1|204c985d-4862-4f83-acc5-c98581f2d47a; JSESSIONID=B57A996D2500F349DF2C7B4991D7CBF7; search=6|1727880373925%7Crb%3DNewton%252C-KS%26rect%3D38.304314%252C-97.013658%252C37.926729%252C-97.471895%26disp%3Dmap%26mdm%3Dauto%26sort%3Dpriorityscore%26listPriceActive%3D1%26fs%3D1%26fr%3D0%26mmm%3D0%26rs%3D0%26ah%3D0%26singlestory%3D0%26abo%3D0%26garage%3D0%26pool%3D0%26ac%3D0%26waterfront%3D0%26finished%3D0%26unfinished%3D0%26cityview%3D0%26mountainview%3D0%26parkview%3D0%26waterview%3D0%26hoadata%3D1%263dhome%3D0%26commuteMode%3Ddriving%26commuteTimeOfDay%3Dnow%09%0919619%09%7B%22isList%22%3Atrue%2C%22isMap%22%3Atrue%7D%09%09%09%09%09; AWSALB=gvy/ZTPCtiMalnbmzhSwYkM4lp5gzikKIpvxgW4iLEOyYDb3sTfmSZ8qhr8E+ruKCsZhqiz22At6fbR5Bv2WcFfELNK04SO7djMR2/55rjCOGnR0ojMK4YprGW1k; AWSALBCORS=gvy/ZTPCtiMalnbmzhSwYkM4lp5gzikKIpvxgW4iLEOyYDb3sTfmSZ8qhr8E+ruKCsZhqiz22At6fbR5Bv2WcFfELNK04SO7djMR2/55rjCOGnR0ojMK4YprGW1k; search=6|1727878584743%7Crect%3D45.8218174416852%2C-63.816218093749995%2C41.87846159904494%2C-81.08672590625%26rid%3D58%26disp%3Dmap%26mdm%3Dauto%26p%3D1%26z%3D1%26listPriceActive%3D1%26fs%3D1%26fr%3D0%26mmm%3D0%26rs%3D0%26ah%3D0%26singlestory%3D0%26housing-connector%3D0%26parking-spots%3Dnull-%26abo%3D0%26garage%3D0%26pool%3D0%26ac%3D0%26waterfront%3D0%26finished%3D0%26unfinished%3D0%26cityview%3D0%26mountainview%3D0%26parkview%3D0%26waterview%3D0%26hoadata%3D1%26zillow-owned%3D0%263dhome%3D0%26featuredMultiFamilyBuilding%3D0%26student-housing%3D0%26income-restricted-housing%3D0%26military-housing%3D0%26disabled-housing%3D0%26senior-housing%3D0%26commuteMode%3Ddriving%26commuteTimeOfDay%3Dnow%09%0958%09%7B%22isList%22%3Atrue%2C%22isMap%22%3Atrue%7D%09%09%09%09%09', // Replace with valid cookie data
+    'cookie': 'zguid=24|%2492644882-0173-41c5-9423-7d998663ba5c; zjs_anonymous_id=%2292644882-0173-41c5-9423-7d998663ba5c%22; zjs_user_id=null; zg_anonymous_id=%2250da1ac9-caab-4b5a-b18e-ec5aa8115a50%22; zgsession=1|204c985d-4862-4f83-acc5-c98581f2d47a; pxcts=55e9a386-6947-11ef-afd4-a8f30536ee6b; _pxvid=55e98f74-6947-11ef-afd4-a8fa08a61b8c; JSESSIONID=18C405DD20696AB4241AE8F286CBEB81; _px3=929731252713fee4eeb7d7b7ba2f0e7af8449d5ea420203b339f2f20165fff12:ckpBBQCPASom1O79qE37zC+KWExaFWXhpJ/LpNV5TDWwyrgiL4J9YYEp43pn7ZgypoupPMCplelwh5zRX0x/VA==:1000:Elrhx67LN9WbtT7lC/j5t2w0/uTnXtplUs+bWQk/WRYXkPFTKhCKBv/ZqR3G4RAT61jU2TdgmEfJyDzWwbkO+7Gt8pUqDP9CaxFS9yTSsarzVv1eHRapprpjNkAO+bvqStdCejqm5kS3T4DCQFWZeFuRqTpCKHkGgoRPhIX2LYPlCg+I8/dy/pUyGnxZJUNyE8P8pHfD9tZVAUh/JEByHSaf50eC5Ic5GDzvk3mUEHg=; search=6|1727887473873%7C%09%093%09%7B%22isList%22%3Atrue%2C%22isMap%22%3Atrue%7D%09%09%09%09%09; AWSALB=ucYWULUIg008Vaz6CoLoA4cq2cr1/LaBSao8IWXG0kKeekg48PK7mEx9uheKTvafrfLGDGl4CCpOyqLTxwlgJVuf2r04bOdyH6jvzL5XrZsFvWs0vFwavu3LOVDN; AWSALBCORS=ucYWULUIg008Vaz6CoLoA4cq2cr1/LaBSao8IWXG0kKeekg48PK7mEx9uheKTvafrfLGDGl4CCpOyqLTxwlgJVuf2r04bOdyH6jvzL5XrZsFvWs0vFwavu3LOVDN; search=6|1727878584743%7Crect%3D45.8218174416852%2C-63.816218093749995%2C41.87846159904494%2C-81.08672590625%26rid%3D58%26disp%3Dmap%26mdm%3Dauto%26p%3D1%26z%3D1%26listPriceActive%3D1%26fs%3D1%26fr%3D0%26mmm%3D0%26rs%3D0%26ah%3D0%26singlestory%3D0%26housing-connector%3D0%26parking-spots%3Dnull-%26abo%3D0%26garage%3D0%26pool%3D0%26ac%3D0%26waterfront%3D0%26finished%3D0%26unfinished%3D0%26cityview%3D0%26mountainview%3D0%26parkview%3D0%26waterview%3D0%26hoadata%3D1%26zillow-owned%3D0%263dhome%3D0%26featuredMultiFamilyBuilding%3D0%26student-housing%3D0%26income-restricted-housing%3D0%26military-housing%3D0%26disabled-housing%3D0%26senior-housing%3D0%26commuteMode%3Ddriving%26commuteTimeOfDay%3Dnow%09%0958%09%7B%22isList%22%3Atrue%2C%22isMap%22%3Atrue%7D%09%09%09%09%09', // Replace with valid cookie data
     'dnt': '1',
     'origin': 'https://www.zillow.com',
     'referer': 'https://www.zillow.com/homes/for_sale/',
@@ -22,9 +22,6 @@ const HEADERS = {
 };
 
 const progressFilePath = path.join(__dirname, 'progress.json');
-const MAX_RETRIES = 3;
-const REQUEST_TIMEOUT = 10000; // 10 seconds
-const WATCHDOG_TIMEOUT = 30000; // 30 seconds
 
 function loadProgress() {
     if (fs.existsSync(progressFilePath)) {
@@ -39,7 +36,7 @@ function saveProgress(state, page) {
     fs.writeFileSync(progressFilePath, JSON.stringify(progress, null, 2));
 }
 
-async function getData(pageNumber, bounds, stateName, retries = 0) {
+async function getData(pageNumber, bounds, stateName) {
     const data = {
         searchQueryState: {
             pagination: { currentPage: pageNumber },
@@ -65,8 +62,7 @@ async function getData(pageNumber, bounds, stateName, retries = 0) {
         maxBodyLength: Infinity,
         url: API_URL,
         headers: HEADERS,
-        data: JSON.stringify(data),
-        timeout: REQUEST_TIMEOUT
+        data: JSON.stringify(data)
     };
 
     try {
@@ -88,12 +84,6 @@ async function getData(pageNumber, bounds, stateName, retries = 0) {
         return listResults.length > 0;
     } catch (error) {
         console.error(`Error getting data for page ${pageNumber} and state ${stateName}: `, error.message);
-
-        if (retries < MAX_RETRIES) {
-            console.log(`Retrying page ${pageNumber} for state ${stateName} (${retries + 1}/${MAX_RETRIES})...`);
-            await delay(2000); // Delay before retry
-            return getData(pageNumber, bounds, stateName, retries + 1);
-        }
         return false;
     }
 }
@@ -108,18 +98,13 @@ async function processMapBounds() {
         let pageNumber = progress[state] ? progress[state] + 1 : 1;
         let hasMoreResults = true;
 
-        const watchdog = setInterval(() => {
-            console.warn(`Watchdog timeout: No activity for 30 seconds. State: ${state}, Page: ${pageNumber}`);
-        }, WATCHDOG_TIMEOUT);
-
         while (hasMoreResults) {
             hasMoreResults = await getData(pageNumber, bounds, state);
             if (hasMoreResults) {
                 pageNumber++;
-                await delay(5000); // Wait for 5 seconds
+                await delay(2000);
             }
         }
-        clearInterval(watchdog);
     }
 }
 

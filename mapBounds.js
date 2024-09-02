@@ -92,7 +92,7 @@ const mapBounds = [
     {
         state: "Alaska",
         bounds: {
-            west: 172.463,
+            west: -179.148,
             east: -129.994,
             south: 51.216389,
             north: 71.538800
