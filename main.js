@@ -2,7 +2,7 @@ const axios = require("axios");
 const fs = require("fs").promises;
 const path = require("path");
 
-const progressFilePath = "progress.json";
+const tempJsonFolder = "temp-json";
 const stateFilePath = "state.json";
 
 const url = "https://www.zillow.com/graphql/";
@@ -33,41 +33,38 @@ const headers = {
     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36",
 };
 
-// Function to read JSON file
 async function readJson(filePath) {
     const data = await fs.readFile(filePath, "utf-8");
     return JSON.parse(data);
 }
 
-// Function to write JSON file
 async function writeJson(filePath, data) {
     await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 }
 
-// Function to fetch data from the API
 async function fetchZpidData(zpid) {
-    try {
-        const params = {
-            extensions: JSON.stringify({
-                persistedQuery: {
-                    version: 1,
-                    sha256Hash: "bddfe9ca4f79bc5c9d53cfa0307e822a67313d957cd4922ab4a2d67205e2ef00",
-                },
-            }),
-            variables: JSON.stringify({
+    const params = {
+        extensions: JSON.stringify({
+            persistedQuery: {
+                version: 1,
+                sha256Hash: "bddfe9ca4f79bc5c9d53cfa0307e822a67313d957cd4922ab4a2d67205e2ef00",
+            },
+        }),
+        variables: JSON.stringify({
+            zpid,
+            platform: "DESKTOP_WEB",
+            formType: "OPAQUE",
+            contactFormRenderParameter: {
                 zpid,
-                platform: "DESKTOP_WEB",
-                formType: "OPAQUE",
-                contactFormRenderParameter: {
-                    zpid,
-                    platform: "desktop",
-                    isDoubleScroll: true,
-                },
-                skipCFRD: false,
-                ompPlatform: "web",
-            }),
-        };
+                platform: "desktop",
+                isDoubleScroll: true,
+            },
+            skipCFRD: false,
+            ompPlatform: "web",
+        }),
+    };
 
+    try {
         const { data } = await axios.get(url, { params, headers });
         return data;
     } catch (error) {
@@ -77,7 +74,7 @@ async function fetchZpidData(zpid) {
 }
 
 async function processFiles() {
-    const progress = await readJson(progressFilePath);
+    const files = await fs.readdir(tempJsonFolder);
     let state = {};
     try {
         state = await readJson(stateFilePath);
@@ -85,54 +82,63 @@ async function processFiles() {
         console.log("No previous state found, starting fresh.");
     }
 
-    let folderFound = false;
+    for (const file of files) {
+        if (!file.endsWith(".json")) continue;
 
-    for (const [folder, totalPages] of Object.entries(progress)) {
-        if (!folderFound && state.lastFolder && state.lastFolder !== folder) {
+        const filePath = path.join(tempJsonFolder, file);
+        const fileKey = path.basename(file, ".json");
+
+        // Skip files that were fully processed in the previous run
+        if (state[fileKey] && state[fileKey].completed) {
+            console.log(`Skipping already processed file: ${file}`);
             continue;
         }
-        folderFound = true;
 
-        const lastPageProcessed = state.lastFolder === folder ? state.lastPage : 0;
+        let fileState = state[fileKey] || { processedZpids: {} };
 
-        for (let page = lastPageProcessed + 1; page <= totalPages; page++) {
-            const filePath = path.join(folder, `page${page}.json`);
+        try {
+            const jsonData = await readJson(filePath);
+            const listResults = jsonData.listResults;
 
-            try {
-                const pageData = await readJson(filePath);
+            for (const obj of listResults) {
+                const zpid = obj.zpid;
+                if (!zpid) continue; // Skip if no zpid
 
-                for (const obj of pageData) {
-                    const zpid = obj.zpid;
-                    if (state.processedZpids && state.processedZpids.includes(zpid)) {
-                        continue; // Skip if already processed
-                    }
-
-                    const zpidData = await fetchZpidData(zpid);
-                    if (zpidData) {
-                        obj.zpidData = zpidData; // Modify this to append the fetched data to your object structure
-
-                        // Log that the data has been written
-                        console.log(`Complete write data for page${page} zpid ${zpid}`);
-                    }
-
-                    // Save the progress of processed ZPIDs
-                    state.processedZpids = state.processedZpids || [];
-                    state.processedZpids.push(zpid);
+                if (fileState.processedZpids[zpid]) {
+                    // Skip if already processed
+                    console.log(`Skipping already processed zpid ${zpid} in file ${file}`);
+                    continue;
                 }
 
-                await writeJson(filePath, pageData);
-            } catch (error) {
-                console.error(`Error processing file ${filePath}:`, error);
+                const zpidData = await fetchZpidData(zpid);
+                if (zpidData) {
+                    // Append data under a new property or modify as needed
+                    obj.zpidData = zpidData;
+
+                    // Log that the data has been written
+                    console.log(`Complete write data for ${file} zpid ${zpid}`);
+
+                    // Update the state for this zpid
+                    fileState.processedZpids[zpid] = true;
+
+                    // Save the updated file
+                    await writeJson(filePath, jsonData);
+
+                    // Save the progress of processed zpids
+                    state[fileKey] = fileState;
+                    await writeJson(stateFilePath, state);
+                }
             }
 
-            // Update the state after processing each page
-            state.lastFolder = folder;
-            state.lastPage = page;
-            await writeJson(stateFilePath, state);
+            // Mark the file as completed if all objects have been processed
+            if (Object.keys(fileState.processedZpids).length === listResults.length) {
+                fileState.completed = true;
+                await writeJson(filePath, jsonData);
+                console.log(`Completed processing file: ${file}`);
+            }
+        } catch (error) {
+            console.error(`Error processing file ${filePath}:`, error);
         }
-
-        // Reset the processed ZPIDs for the next folder
-        state.processedZpids = [];
     }
 
     console.log("Processing completed.");
